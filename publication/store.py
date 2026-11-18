@@ -33,6 +33,33 @@ _SCHEMA = (
         batch_no TEXT NOT NULL,
         parent_id INTEGER REFERENCES releases(id)
     )''',
+    '''CREATE TABLE IF NOT EXISTS correction_tickets (
+        ticket TEXT PRIMARY KEY NOT NULL,
+        parent_id INTEGER NOT NULL REFERENCES releases(id),
+        version INTEGER NOT NULL CHECK (version >= 1),
+        closed INTEGER NOT NULL DEFAULT 0 CHECK (closed IN (0, 1))
+    )''',
+    '''CREATE TABLE IF NOT EXISTS correction_edits (
+        ticket TEXT NOT NULL REFERENCES correction_tickets(ticket),
+        page_no INTEGER NOT NULL CHECK (page_no BETWEEN 1 AND 4294967295),
+        row_index INTEGER NOT NULL CHECK (row_index >= 0),
+        label TEXT NOT NULL,
+        PRIMARY KEY (ticket, page_no, row_index)
+    )''',
+    '''CREATE TABLE IF NOT EXISTS correction_previews (
+        ticket TEXT NOT NULL REFERENCES correction_tickets(ticket),
+        version INTEGER NOT NULL CHECK (version >= 1),
+        ordinal INTEGER NOT NULL CHECK (ordinal >= 0),
+        page_no INTEGER NOT NULL CHECK (page_no BETWEEN 1 AND 4294967295),
+        digest TEXT NOT NULL CHECK (length(digest) = 64),
+        PRIMARY KEY (ticket, version, page_no),
+        UNIQUE (ticket, version, ordinal)
+    )''',
+    '''CREATE TABLE IF NOT EXISTS correction_signatures (
+        ticket TEXT PRIMARY KEY NOT NULL REFERENCES correction_tickets(ticket),
+        version INTEGER NOT NULL CHECK (version >= 1),
+        release_id INTEGER UNIQUE NOT NULL REFERENCES releases(id)
+    )''',
 )
 
 
