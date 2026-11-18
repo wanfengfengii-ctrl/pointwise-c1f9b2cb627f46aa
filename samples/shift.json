@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "number": 10,
+      "dictionary": [[0, "A"], [1, "M"]],
+      "rows": [
+        {"kind": "observation", "slot": 0, "reading": 6},
+        {"kind": "extension", "hex": "00ff", "refs": [0]},
+        {"kind": "observation", "slot": 0, "reading": -6},
+        {"kind": "observation", "slot": 1, "reading": null}
+      ]
+    },
+    {
+      "number": 4,
+      "dictionary": [[0, "W"]],
+      "rows": [{"kind": "observation", "slot": 0, "reading": 5}]
+    }
+  ]
+}
